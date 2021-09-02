@@ -28,6 +28,9 @@ class DB:
 
     def add_user(self, email: str, hashed_password: str) -> User:
         """ create a new user and save the credential into the db """
+        if not email or not hashed_password:
+            return
+
         user = User(email=email, hashed_password=hashed_password)
         self._session.add(user)
         self._session.commit()
@@ -41,3 +44,13 @@ class DB:
         if user is None:
             raise NoResultFound
         return user
+
+    def update_user(self, user_id: int, **kwargs) -> None:
+        """ locate the user to update, then will update the user’s attributes
+        """
+        _id = self.find_user_by(id=user_id)
+        for key, value in kwargs.items():
+            if not hasattr(_id, key):
+                raise ValueError
+            setattr(_id, key, value)
+        self._session.commit()
