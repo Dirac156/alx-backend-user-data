@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+""" Auth """
 from bcrypt import hashpw, gensalt
 from db import DB
 from user import User
